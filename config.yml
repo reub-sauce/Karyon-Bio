@@ -1,0 +1,81 @@
+project:
+  name: karyon_liver_fibrosis_pipeline
+  primary_geo: GSE136103
+  validation_geo: GSE207310
+  organism: Homo sapiens
+
+paths:
+  raw_dir: data/raw
+  processed_dir: data/processed
+  table_dir: results/tables
+  figure_dir: results/figures
+  rds_dir: results/rds
+  report_dir: results/reports
+
+primary:
+  include_blood: false
+  include_mouse: false
+  include_human_liver_only: true
+
+qc:
+  min_features_hard: 200
+  min_counts_hard: 500
+  max_features_mad: 3
+  max_counts_mad: 3
+  max_percent_mt_hard: 25
+  max_percent_mt_mad: 3
+  max_percent_hb_hard: 5
+  remove_doublets: true
+  doublet_method: scDblFinder
+
+normalization:
+  method: lognormalize
+  variable_features: 3000
+  regress_vars:
+    - percent.mt
+    - nCount_RNA
+
+integration:
+  method: harmony
+  batch_var: sample_id
+  dims: 30
+  cluster_resolution: 0.5
+
+annotation:
+  min_pct_for_marker: 0.10
+  manual_annotation_file: config/manual_cluster_annotations.csv
+
+pseudobulk:
+  group_vars:
+    - cell_type
+    - cell_state
+  sample_var: donor_id
+  min_cells_per_pseudobulk: 20
+  min_donors_per_group: 3
+  disease_var: disease_status
+  disease_contrast_level: cirrhotic
+  reference_level: healthy
+  fdr_cutoff: 0.10
+  abs_logfc_cutoff: 0.25
+
+pathway:
+  fdr_cutoff: 0.10
+  min_size: 10
+  max_size: 500
+
+validation:
+  use_gse207310: true
+  fdr_cutoff: 0.10
+  candidate_gene_limit: 500
+  metadata_override_file: config/gse207310_validation_metadata_override.csv
+
+biomarker_score:
+  top_n: 20
+  weights:
+    effect: 0.20
+    significance: 0.18
+    specificity: 0.17
+    prevalence: 0.10
+    mechanism: 0.12
+    translational: 0.13
+    validation: 0.10
