@@ -184,11 +184,11 @@ obj <- subset(
 
 The pre-filter plots show the starting distribution of detected genes, UMIs, mitochondrial signal, and hemoglobin signal across all libraries. The post-filter plots show that the retained cells have a cleaner range of QC metrics while preserving cells from both healthy and cirrhotic donors.
 
-![Prefilter QC metrics](docs/readme_figures/qc_violin_prefilter.png)
+![Prefilter QC metrics](qc_violin_prefilter.png)
 
-![QC genes versus counts](docs/readme_figures/qc_scatter_nFeature_nCount.png)
+![QC genes versus counts](qc_scatter_nFeature_nCount.png)
 
-![Postfilter QC metrics](docs/readme_figures/qc_violin_postfilter.png)
+![Postfilter QC metrics](qc_violin_postfilter.png)
 
 After QC, the pipeline normalizes counts, identifies variable features, scales the data, runs PCA, and generates UMAP embeddings. Harmony batch correction can be used for visualization/clustering only. Disease-associated differential expression is performed later using non-integrated counts aggregated at the donor/sample level.
 
@@ -234,21 +234,21 @@ cluster_scores <- obj@meta.data |>
 
 The UMAPs show that the major liver cell types and broader compartments separate clearly, including macrophage/monocyte, endothelial, and HSC/mesenchymal compartments.
 
-![UMAP by disease, sample, and cluster](docs/readme_figures/umap_disease_sample_cluster.png)
+![UMAP by disease, sample, and cluster](umap_disease_sample_cluster.png)
 
-![UMAP by major liver cell type](docs/readme_figures/umap_cell_type.png)
+![UMAP by major liver cell type](umap_cell_type.png)
 
-![UMAP by disease-relevant compartment](docs/readme_figures/umap_compartment.png)
+![UMAP by disease-relevant compartment](umap_compartment.png)
 
 Marker dot plots were used to validate the annotations. For example, macrophage/monocyte cells express LYZ, LST1, CD68, MS4A7 and related myeloid markers; endothelial cells express PECAM1, VWF, KDR, ENG, ACKR1, and PLVAP; HSC/mesenchymal cells express COL1A1, COL1A2, COL3A1, DCN, LUM, PDGFRB, ACTA2, TAGLN, and POSTN.
 
-![Canonical cell-type marker validation](docs/readme_figures/dotplot_major_celltype_markers.png)
+![Canonical cell-type marker validation](dotplot_major_celltype_markers.png)
 
-![Required compartment marker validation](docs/readme_figures/dotplot_required_compartments.png)
+![Required compartment marker validation](dotplot_required_compartments.png)
 
 The cell-type composition plot is used as a sanity check for donor-level representation and enrichment differences across CD45-positive/CD45-negative libraries.
 
-![Cell-type composition by donor](docs/readme_figures/cell_type_composition_by_donor.png)
+![Cell-type composition by donor](cell_type_composition_by_donor.png)
 
 ---
 
@@ -281,7 +281,7 @@ for (program_name in names(gene_sets)) {
 
 The boxplots compare module scores across healthy and cirrhotic cells within the required compartments. Examples include activated stellate, endothelial remodeling, extracellular matrix, NOTCH/PDGF/TWEAK, and scar macrophage programs.
 
-![Fibrosis program scores in required compartments](docs/readme_figures/cell_state_scores_required_compartments.png)
+![Fibrosis program scores in required compartments](cell_state_scores_required_compartments.png)
 
 These scores are useful for biological interpretation. For formal disease-associated gene discovery, the pipeline uses donor-aware pseudobulk differential expression rather than treating every cell as an independent sample.
 
@@ -319,7 +319,7 @@ res <- edgeR::glmQLFTest(fit, coef = "disease_statuscirrhotic")
 
 Candidate biomarkers are then prioritized using a rule-based score that combines effect size, statistical support, compartment specificity, prevalence, pathway/mechanism support, translational features such as secreted or surface localization, and optional GSE207310 validation support.
 
-![Top-ranked fibrosis biomarkers and targets](docs/readme_figures/ranked_biomarkers_top20.png)
+![Top-ranked fibrosis biomarkers and targets](ranked_biomarkers_top20.png)
 
 ---
 
@@ -354,7 +354,7 @@ fgsea_res <- fgsea::fgsea(
 
 The summary figure shows top enriched pathways across required compartments and cell states. HSC/mesenchymal and activated HSC/myofibroblast states show matrix and collagen-related programs, while endothelial and macrophage compartments show additional remodeling, stress, and translational signatures.
 
-![Top enriched pathways in required disease-relevant compartments](docs/readme_figures/pathway_top_terms_by_compartment.png)
+![Top enriched pathways in required disease-relevant compartments](pathway_top_terms_by_compartment.png)
 
 ---
 
@@ -387,11 +387,11 @@ validation_res <- DESeq2::results(dds)
 
 The validation plots compare discovery and validation effect sizes and highlight overlap between the primary single-cell discovery results and the optional bulk RNA-seq dataset.
 
-![Discovery and GSE207310 validation gene overlap](docs/readme_figures/validation_discovery_overlap.png)
+![Discovery and GSE207310 validation gene overlap](validation_discovery_overlap.png)
 
-![Discovery versus validation effect size](docs/readme_figures/validation_discovery_vs_gse207310_logfc.png)
+![Discovery versus validation effect size](validation_discovery_vs_gse207310_logfc.png)
 
-![Validation signal for top discovery biomarkers](docs/readme_figures/validation_top_biomarkers_logfc.png)
+![Validation signal for top discovery biomarkers](validation_top_biomarkers_logfc.png)
 
 ---
 
